@@ -24,21 +24,29 @@ contract ZombieFeeding is ZombieFactory {
     // could check the address at etherscan.
     KittyInterface kittyContract;
 
+    modifier ownerOf(uint _zombieId) {
+        require(msg.sender == zombieToOwner[_zombieId]);
+        _;
+    }
+
+
     function setKittyContractAddress(address _address) external onlyOwner {
         kittyContract = KittyInterface(_address);
     }
+
 
     function _triggerCooldown(Zombie storage _zombie) internal {
         _zombie.readyTime = uint32(block.timestamp + cooldownTime);
     }
 
+
     function _isReady(Zombie storage _zombie) internal view returns (bool) {
         return (_zombie.readyTime <= block.timestamp);
     }
 
-    function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal {
 
-        require(msg.sender == zombieToOwner[_zombieId]);
+    function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal ownerOf(_zombieId) {
+
         Zombie storage myZombie = zombies[_zombieId];
 
         require(_isReady(myZombie));
