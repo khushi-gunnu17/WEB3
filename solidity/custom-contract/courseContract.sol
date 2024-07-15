@@ -38,7 +38,7 @@ contract CourseRegistration is Ownable {
 
     function getPaymentsByUser(address userAddress) public view returns (Payment[] memory) {
 
-        uint count = 0;
+        uint count = 0;     // It will be used to count the number of payments made by the given user.
 
         for(uint i=0 ; i < payments.length ; i++) {
             if (payments[i].user == userAddress) {
@@ -57,10 +57,12 @@ contract CourseRegistration is Ownable {
             }
         }
 
+        // This returns the userPayments array, which contains all the payments made by the given user.
         return userPayments;
     }
 
 
+    // This declares a public view function getAllPayments that returns the entire payments array. It allows anyone to view all the payments made to the contract.
     function getAllPayments() public view returns (Payment[] memory) {
         return payments;
     }
